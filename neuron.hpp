@@ -16,14 +16,18 @@ public:
   Vector2 position;
 
   Neuron() {
-    bias = (float)std::rand() / (float)RAND_MAX * 2 - 1;
+    bias = (float)std::rand() / (float)RAND_MAX;
     position = {};
+    updated = false;
   };
   Neuron(Neuron const &) {}
   virtual ~Neuron() = default;
 
+  virtual void Reset() { updated = false; }
   virtual void Update(){};
   virtual void AddChild(Neuron *neuron) {}
+
+  bool updated;
 
 protected:
   float Activation(float in);
@@ -42,6 +46,7 @@ public:
   void AddChild(Neuron *neuron) override { next[(intptr_t)neuron] = neuron; }
 
   void Update() override;
+  void Reset() override;
 
 private:
   std::map<int, Neuron *> next;
@@ -52,13 +57,13 @@ public:
   HiddenNeuron(std::vector<StartingNeuron *> old) : Neuron() {
     next = {};
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX * 2 - 1});
+      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
     }
   }
   HiddenNeuron(std::vector<HiddenNeuron *> old) : Neuron() {
     next = {};
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX * 2 - 1});
+      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
     }
   }
 
@@ -75,6 +80,7 @@ public:
   std::vector<NeuralConnection> past;
 
   std::map<int, Neuron *> next;
+  void Reset() override;
   void Update() override;
 
 private:
@@ -84,7 +90,7 @@ class EndingNeuron : public Neuron {
 public:
   EndingNeuron(std::vector<HiddenNeuron *> old) : Neuron() {
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX * 2 - 1});
+      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
     }
   }
 
@@ -93,6 +99,7 @@ public:
 
   std::vector<NeuralConnection> past;
 
+  void Reset() override;
   void Update() override;
 
 private:

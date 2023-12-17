@@ -3,14 +3,14 @@
 #include <utility>
 
 float NeuralNetwork::Train() {
-  printf("Pre train cost: %f\n", Evaluate());
   std::vector<std::pair<NeuralConnection *, float>> connectionDeltas;
   std::vector<std::pair<Neuron *, float>> biasDeltas;
+  float originalEval = Evaluate();
+
   for (int length = 0; length < hidden.size(); length++) {
     std::vector<HiddenNeuron *> layer = hidden[length];
     for (int neuron = 0; neuron < layer.size(); neuron++) {
       for (auto &connection : layer[neuron]->past) {
-        float originalEval = Evaluate();
         connection.weight += PRECISION;
         float postEval = Evaluate();
         connection.weight -= PRECISION;
@@ -18,7 +18,6 @@ float NeuralNetwork::Train() {
         float deltaCost = postEval - originalEval;
         connectionDeltas.push_back({&connection, deltaCost / PRECISION});
       }
-      float originalEval = Evaluate();
       layer[neuron]->bias += PRECISION;
       float postEval = Evaluate();
       layer[neuron]->bias -= PRECISION;

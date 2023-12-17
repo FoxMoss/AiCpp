@@ -14,7 +14,7 @@ int main(void) {
 
   SetTargetFPS(FRAMERATE);
 
-  NeuralNetwork network(2, 1, 2, 2);
+  NeuralNetwork network(2, 2, 2, 2);
 
   int drawingX = 0;
   int drawingY = 0;
@@ -38,11 +38,13 @@ int main(void) {
 
     for (int x = 0; x < WIDTH; x += 10) {
       for (int y = 0; y < HEIGHT; y += 10) {
-        network.starting[0]->value = ((float)x / WIDTH) * 2 - 1;
-        network.starting[1]->value = ((float)y / HEIGHT) * 2 - 1;
+        float waitedX = ((float)x / WIDTH);
+        float waitedY = ((float)y / HEIGHT);
+
+        network.starting[0]->value = ((float)x / WIDTH);
+        network.starting[1]->value = ((float)y / HEIGHT);
 
         network.starting[0]->Update();
-        network.starting[1]->Update();
 
         if (drawingX == x && drawingY == y && !drewGraph) {
 
@@ -53,13 +55,24 @@ int main(void) {
         }
 
         if (network.ending[0]->value > network.ending[1]->value) {
-          ImageDrawPixel(&out, x, y, RED);
+          ImageDrawRectangle(&out, x, y, 10, 10, RED);
         }
         if (network.ending[0]->value < network.ending[1]->value) {
-          ImageDrawPixel(&out, x, y, GREEN);
+          ImageDrawRectangle(&out, x, y, 10, 10, GREEN);
         }
         if (network.ending[0]->value == network.ending[1]->value) {
-          ImageDrawPixel(&out, x, y, WHITE);
+          ImageDrawRectangle(&out, x, y, 10, 10, WHITE);
+        }
+
+        // if ((waitedX * waitedX) > (waitedY * waitedY) + 0.1) {
+        //   ImageDrawRectangle(&out, x, y, 5, 5, RED);
+        // } else {
+        //   ImageDrawRectangle(&out, x, y, 5, 5, GREEN);
+        // }
+        if (waitedX > waitedY) {
+          ImageDrawRectangle(&out, x, y, 5, 5, RED);
+        } else {
+          ImageDrawRectangle(&out, x, y, 5, 5, GREEN);
         }
       }
     }

@@ -8,20 +8,19 @@ float NeuralNetwork::Evaluate() {
   float costs = 0;
   int costsLength = 0;
 
-  for (float x = -1; x < 1; x += 0.1) {
-    for (float y = -1; y < 1; y += 0.1) {
+  for (float x = 0; x < 1; x += 0.05) {
+    for (float y = 0; y < 1; y += 0.05) {
       starting[0]->value = x;
       starting[1]->value = y;
 
+      starting[1]->updated = true;
       starting[0]->Update();
-      starting[1]->Update();
 
       if (x > y) {
-        costs += PointCost({x, y}, {1, -1});
+        costs += PointCost({x, y}, {1, 0});
         costsLength++;
-      }
-      if (x < y) {
-        costs += PointCost({x, y}, {-1, 1});
+      } else {
+        costs += PointCost({x, y}, {0, 1});
         costsLength++;
       }
     }
