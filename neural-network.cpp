@@ -61,7 +61,7 @@ void NeuralNetwork::Draw() {
         }
       }
     }
-    x += 30;
+    x += 70;
   }
 
   x += 70;

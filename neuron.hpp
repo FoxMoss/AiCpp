@@ -1,4 +1,6 @@
 #pragma once
+#define PRECISION 0.01
+#define LEARN_RATE 0.05
 #include <cstdint>
 #include <cstdio>
 #include <cstdlib>
@@ -14,7 +16,7 @@ public:
   Vector2 position;
 
   Neuron() {
-    bias = (float)std::rand() / (float)RAND_MAX;
+    bias = (float)std::rand() / (float)RAND_MAX * 2 - 1;
     position = {};
   };
   Neuron(Neuron const &) {}
@@ -23,7 +25,8 @@ public:
   virtual void Update(){};
   virtual void AddChild(Neuron *neuron) {}
 
-private:
+protected:
+  float Activation(float in);
 };
 
 typedef struct {
@@ -49,13 +52,13 @@ public:
   HiddenNeuron(std::vector<StartingNeuron *> old) : Neuron() {
     next = {};
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
+      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX * 2 - 1});
     }
   }
   HiddenNeuron(std::vector<HiddenNeuron *> old) : Neuron() {
     next = {};
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
+      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX * 2 - 1});
     }
   }
 
@@ -81,7 +84,7 @@ class EndingNeuron : public Neuron {
 public:
   EndingNeuron(std::vector<HiddenNeuron *> old) : Neuron() {
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
+      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX * 2 - 1});
     }
   }
 
@@ -103,6 +106,13 @@ public:
   std::vector<StartingNeuron *> starting;
   std::vector<EndingNeuron *> ending;
 
+  float Train();
+
 private:
   std::vector<std::vector<HiddenNeuron *>> hidden;
+
+  float NeuronCost(float gotValue, float expectedValue);
+  float PointCost(std::vector<float> inputs,
+                  std::vector<float> expectedOutputs);
+  float Evaluate();
 };
