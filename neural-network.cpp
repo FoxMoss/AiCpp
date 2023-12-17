@@ -24,7 +24,7 @@ NeuralNetwork::NeuralNetwork(int input, int hiddenLength, int hiddenAmmount,
     }
   }
 
-  for (int neuron = 0; neuron < input; neuron++) {
+  for (int neuron = 0; neuron < output; neuron++) {
     ending.push_back(new EndingNeuron(hidden[hiddenLength - 1]));
 
     for (int hiddenNeuron = 0; hiddenNeuron < hiddenAmmount; hiddenNeuron++) {

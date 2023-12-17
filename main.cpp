@@ -14,7 +14,7 @@ int main(void) {
 
   SetTargetFPS(FRAMERATE);
 
-  NeuralNetwork network(2, 1, 2, 4);
+  NeuralNetwork network(2, 1, 2, 2);
 
   int drawingX = 0;
   int drawingY = 0;
