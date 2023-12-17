@@ -1,5 +1,7 @@
 #include "neuron.hpp"
 #include <cstdio>
+#include <cstdlib>
+#include <utility>
 #include <vector>
 
 float NeuralNetwork::Evaluate() {
@@ -8,21 +10,42 @@ float NeuralNetwork::Evaluate() {
   float costs = 0;
   int costsLength = 0;
 
+  std::vector<std::pair<std::vector<float>, std::vector<float>>> dataPoints;
+
   for (float x = 0; x < 1; x += 0.05) {
     for (float y = 0; y < 1; y += 0.05) {
-      starting[0]->value = x;
-      starting[1]->value = y;
-
-      starting[1]->updated = true;
-      starting[0]->Update();
+      std::vector<float> outputs = {};
 
       if (x > y) {
-        costs += PointCost({x, y}, {1, 0});
-        costsLength++;
+        outputs = {1, 0};
       } else {
-        costs += PointCost({x, y}, {0, 1});
-        costsLength++;
+        outputs = {0, 1};
       }
+      dataPoints.push_back({{x, y}, outputs});
+    }
+  }
+
+  // float x = 0;
+  // float y = 0;
+  //
+  for (int itter = 0; itter < 40; itter += 1) {
+    // int index = std::rand() % dataPoints.size();
+    int index = itter;
+    float x = dataPoints[index].first[0];
+    float y = dataPoints[index].first[1];
+
+    starting[0]->value = x;
+    starting[1]->value = y;
+
+    starting[1]->updated = true;
+    starting[0]->updated = true;
+
+    if (x > y) {
+      costs += PointCost({x, y}, {1, 0});
+      costsLength++;
+    } else {
+      costs += PointCost({x, y}, {0, 1});
+      costsLength++;
     }
   }
 
