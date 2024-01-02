@@ -14,7 +14,7 @@ int main(void) {
 
   SetTargetFPS(FRAMERATE);
 
-  NeuralNetwork network(2, 2, 2, 2);
+  NeuralNetwork network(2, 1, 2, 2);
 
   int drawingX = 0;
   int drawingY = 0;
@@ -69,7 +69,7 @@ int main(void) {
         // } else {
         //   ImageDrawRectangle(&out, x, y, 5, 5, GREEN);
         // }
-        if (waitedX > waitedY) {
+        if (waitedY > waitedX) {
           ImageDrawRectangle(&out, x, y, 5, 5, RED);
         } else {
           ImageDrawRectangle(&out, x, y, 5, 5, GREEN);

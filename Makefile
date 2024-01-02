@@ -1,8 +1,8 @@
 COMPILER = g++
 EXE = game
 LIBS = -I/usr/local/include -isystem. -L. -L/usr/local/lib -lraylib -lGL -lm -lpthread -ldl -lrt -lX11 -lstdc++ -std=c++17 -lchipmunk
-FlAGS =-Wall -Wno-sign-compare
-#DEBUG = -g -ggdb
+FlAGS =-Wall -Wno-sign-compare -O3
+# DEBUG = -g -ggdb
 SOURCES = $(wildcard ./*.cpp) 
 OBJ_DIR = obj
 OBJECTS = $(patsubst ./%.cpp,$(OBJ_DIR)/%.o,$(SOURCES))
