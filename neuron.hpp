@@ -57,13 +57,15 @@ public:
   HiddenNeuron(std::vector<StartingNeuron *> old) : Neuron() {
     next = {};
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
+      float randNumber = (float)std::rand() / (float)RAND_MAX;
+      past.push_back({oldNeuron, randNumber});
     }
   }
   HiddenNeuron(std::vector<HiddenNeuron *> old) : Neuron() {
     next = {};
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
+      float randNumber = (float)std::rand() / (float)RAND_MAX;
+      past.push_back({oldNeuron, randNumber});
     }
   }
 
@@ -90,7 +92,8 @@ class EndingNeuron : public Neuron {
 public:
   EndingNeuron(std::vector<HiddenNeuron *> old) : Neuron() {
     for (auto oldNeuron : old) {
-      past.push_back({oldNeuron, (float)std::rand() / (float)RAND_MAX});
+      float randNumber = (float)std::rand() / (float)RAND_MAX;
+      past.push_back({oldNeuron, randNumber});
     }
   }
 
@@ -119,7 +122,11 @@ private:
   std::vector<std::vector<HiddenNeuron *>> hidden;
 
   float NeuronCost(float gotValue, float expectedValue);
+  float NeuronCostDerivative(float gotValue, float expectedValue);
   float PointCost(std::vector<float> inputs,
                   std::vector<float> expectedOutputs);
+
   float Evaluate();
 };
+
+bool Correct(float x, float y);

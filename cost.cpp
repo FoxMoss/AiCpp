@@ -5,6 +5,7 @@
 #include <utility>
 #include <vector>
 
+bool Correct(float x, float y) { return (x * x) > y; }
 float NeuralNetwork::Evaluate() {
   float score = 0;
 
@@ -18,7 +19,7 @@ float NeuralNetwork::Evaluate() {
     for (float y = 0; y < 1; y += 0.05) {
       std::vector<float> outputs = {};
 
-      if (y > 0.5) {
+      if (Correct(x, y)) {
         outputs = {1, 0};
       } else {
         outputs = {0, 1};
@@ -33,8 +34,7 @@ float NeuralNetwork::Evaluate() {
     }
   }
 
-  for (int itter = 0; itter < std::min((int)dataPoints.size(), 400);
-       itter += 1) {
+  for (int itter = 0; itter < (int)dataPoints.size(); itter += 1) {
     int index = itter;
     float x = dataPoints[index].first[0];
     float y = dataPoints[index].first[1];
@@ -45,7 +45,7 @@ float NeuralNetwork::Evaluate() {
     starting[1]->updated = true;
     starting[0]->updated = true;
 
-    if (y > x) {
+    if (Correct(x, y)) {
       costs += PointCost({x, y}, {1, 0});
       costsLength++;
     } else {
@@ -84,4 +84,8 @@ float NeuralNetwork::PointCost(std::vector<float> inputs,
 float NeuralNetwork::NeuronCost(float gotValue, float expectedValue) {
   float error = gotValue - expectedValue;
   return error * error;
+}
+float NeuralNetwork::NeuronCostDerivative(float gotValue, float expectedValue) {
+  float error = gotValue - expectedValue;
+  return 2 * (gotValue - expectedValue);
 }

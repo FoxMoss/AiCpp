@@ -51,6 +51,8 @@ void NeuralNetwork::Draw() {
       DrawCircle(x, 50 + neuron * 20, 5, WHITE);
       layer[neuron]->position = {(float)x, 50 + (float)neuron * 20};
 
+      if (layer[neuron]->value == 0) {
+      }
       DrawText(std::to_string(layer[neuron]->value).c_str(), x,
                50 + neuron * 20, 10, WHITE);
 

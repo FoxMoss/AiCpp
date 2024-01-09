@@ -6,7 +6,7 @@
 #include <ctime>
 
 int main(void) {
-  std::srand(std::time(nullptr));
+  std::srand(101);
   const int screenWidth = WIDTH;
   const int screenHeight = HEIGHT;
 
@@ -14,7 +14,7 @@ int main(void) {
 
   SetTargetFPS(FRAMERATE);
 
-  NeuralNetwork network(2, 1, 2, 2);
+  NeuralNetwork network(2, 3, 4, 2);
 
   int drawingX = 0;
   int drawingY = 0;
@@ -69,7 +69,7 @@ int main(void) {
         // } else {
         //   ImageDrawRectangle(&out, x, y, 5, 5, GREEN);
         // }
-        if (waitedY > waitedX) {
+        if (Correct(waitedX, waitedY)) {
           ImageDrawRectangle(&out, x, y, 5, 5, RED);
         } else {
           ImageDrawRectangle(&out, x, y, 5, 5, GREEN);
