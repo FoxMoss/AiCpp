@@ -2,6 +2,8 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdio>
+#include <thread>
+#include <vector>
 
 void StartingNeuron::Update() {
   updated = true;
@@ -25,12 +27,17 @@ void HiddenNeuron::Update() {
   for (auto neuron : past) {
     value += neuron.originator->value * neuron.weight;
   }
+  value /= past.size();
   value += bias;
   value = Activation(value);
 
+  std::vector<std::thread *> threads;
   for (auto neuron : next) {
+    threads.push_back(new std::thread(&HiddenNeuron::Update, neuron.second));
+
     neuron.second->Update();
   }
+  body.join();
 }
 
 void EndingNeuron::Update() {
@@ -46,8 +53,9 @@ void EndingNeuron::Update() {
   for (auto neuron : past) {
     value += neuron.originator->value * neuron.weight;
   }
+  value /= past.size();
   // value += bias;
-  // value = Activation(value);
+  value = Activation(value);
 }
 
 float Neuron::Activation(float in) {
